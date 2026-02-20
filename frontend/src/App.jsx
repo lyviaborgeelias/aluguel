@@ -1,11 +1,17 @@
-import Usuarios from "./pages/users";
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import Login from './pages/login'
+import HomeUser from './pages/home_user'
 
-function App(){
+const App = ()=>{
   return(
-    <div>
-      <Usuarios/>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Login/>}/>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/homeuser' element={<HomeUser/>}/>
+      </Routes>
+    </Router>
   )
 }
 
-export default App
+export default App;
