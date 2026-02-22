@@ -8,5 +8,5 @@ class UsuarioFilter(django_filters.FilterSet):
     )
 
     class Meta:
-        model: Usuario
+        model : Usuario
         fields = ['nome',  'tipo']
