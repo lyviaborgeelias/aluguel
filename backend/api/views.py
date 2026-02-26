@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
-from .filters import UsuarioFilter
+from .filters import *
 
 # Crud --> forma de fazer utilizando método
 # @api_view(['GET', 'POST'])
@@ -61,15 +61,21 @@ class ImovelViewSet(ModelViewSet):
 
     # Filtros declarativos
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['status', 'tipo']
+    filterset_class = ImovelFilter
 
 class PagamentoViewSet(ModelViewSet):
     queryset = Pagamento.objects.all()
     serializer_class = PagamentoSerializer
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PagamentoFilter
+
 class ContratoViewSet(ModelViewSet):
     queryset = Contrato.objects.all()
     serializer_class = ContratoSerializer
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ContratoFilter
     
 
 # ***** GENERICS *****

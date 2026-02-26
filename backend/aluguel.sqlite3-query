@@ -1,30 +1,23 @@
--- database: ./db.sqlite3
-
--- Use the ▷ button in the top right corner to run the entire file.
+-- database: ./backend/db.sqlite3
 
 SELECT * FROM api_usuario;
 
-INSERT INTO api_usuario(nome, email, telefone, tipo) VALUES
-('Carlos Eduardo', 'carlos.edu@gmail.com', '21 23456789', 'LOCADOR'),
-('Mariana Silva', 'mariana.silva@gmail.com', '21 34567890', 'LOCADOR'),
-('João Pedro', 'joaopedro@gmail.com', '21 45678901', 'LOCADOR'),
-('Fernanda Lopes', 'fernanda.lopes@gmail.com', '21 56789012', 'LOCADOR'),
-('Ricardo Alves', 'ricardo.alves@gmail.com', '21 67890123', 'LOCADOR'),
-('Patrícia Mendes', 'patricia.mendes@gmail.com', '21 78901234', 'LOCADOR'),
-('Lucas Rocha', 'lucas.rocha@gmail.com', '21 89012345', 'LOCADOR'),
-('Camila Nogueira', 'camila.nogueira@gmail.com', '21 90123456', 'LOCADOR');
+INSERT INTO api_usuario(nome, email, telefone, tipo, user_id) VALUES
+('Evelyn', 'eve@gmail.com', '21 45678901', 'LOCATARIO',3),
+('Lindomar Professor', 'lin@gmail.com', '21 89012345', 'LOCATARIO',2),
+('Lyvia Borge Elias', 'lyvinha@gmail.com', '21 8888888', 'LOCATARIO', 1);
 
 INSERT INTO api_imovel (titulo, tipo, valor_aluguel, status, locador_id) VALUES
 ('Apartamento 2 quartos - Centro', 'APARTAMENTO', 1500.00, 'DISPONIVEL', 1),
-('Kitnet - Centro', 'KITNET', 1200.00, 'ALUGADO', 5),
-('Cobertura duplex - Barra', 'COBERTURA', 4500.00, 'DISPONIVEL', 6),
-('Studio compacto - Flamengo', 'STUDIO', 1700.00, 'DISPONIVEL', 9),
-('Apartamento 2 quartos - Méier', 'APARTAMENTO', 1600.00, 'ALUGADO', 10),
-('Casa geminada - Campo Grande', 'CASA', 1400.00, 'DISPONIVEL', 1),
-('Casa térrea - Realengo', 'CASA', 1550.00, 'ALUGADO', 5),
-('Studio moderno - Leblon', 'STUDIO', 4800.00, 'DISPONIVEL', 6),
-('Apartamento 1 quarto - Catete', 'APARTAMENTO', 1650.00, 'DISPONIVEL', 9),
-('Cobertura - Jardim Oceânico', 'COBERTURA', 6000.00, 'ALUGADO', 10);
+('Kitnet - Centro', 'KITNET', 1200.00, 'ALUGADO', 2),
+('Cobertura duplex - Barra', 'COBERTURA', 4500.00, 'DISPONIVEL', 1),
+('Studio compacto - Flamengo', 'STUDIO', 1700.00, 'DISPONIVEL', 2),
+('Apartamento 2 quartos - Méier', 'APARTAMENTO', 1600.00, 'ALUGADO', 1),
+('Casa geminada - Campo Grande', 'CASA', 1400.00, 'DISPONIVEL', 2),
+('Casa térrea - Realengo', 'CASA', 1550.00, 'ALUGADO', 1),
+('Studio moderno - Leblon', 'STUDIO', 4800.00, 'DISPONIVEL', 2),
+('Apartamento 1 quarto - Catete', 'APARTAMENTO', 1650.00, 'DISPONIVEL', 1),
+('Cobertura - Jardim Oceânico', 'COBERTURA', 6000.00, 'ALUGADO', 1);
 
 INSERT INTO api_contrato (data_inicio, data_fim, valor, locador_id, locatario_id, imovel_id) VALUES
 ('2024-01-01', '2024-12-31', 1500.00, 1, 2, 1),
