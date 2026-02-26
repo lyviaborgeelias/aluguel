@@ -6,6 +6,7 @@ class UsuarioFilter(django_filters.FilterSet):
     tipo = django_filters.CharFilter(field_name = 'tipo', lookup_expr = 'iexact')
 
     class Meta:
+<<<<<<< HEAD
         model: Usuario
         fields = ['nome',  'tipo' ]
 
@@ -36,3 +37,7 @@ class PagamentoFilter(django_filters.FilterSet):
     class Meta:
         model: Pagamento
         fields = ['data_pagamento', 'status', 'contrato_id']
+=======
+        model : Usuario
+        fields = ['nome',  'tipo']
+>>>>>>> 11e708c9c78d5ec11b58b429adea382e91902c0d
