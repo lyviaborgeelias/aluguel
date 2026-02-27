@@ -1,0 +1,3 @@
+DESAFIO
+se for superusuario ele vai para tela adm
+se não for ele vai para uma tela com os dados pessoais dele

@@ -21,6 +21,12 @@ export default function Login(){
             setMessage("Usuario logado")
 
             localStorage.setItem('token', response.data.access)
+            const me = await axios.get('http://127.0.0.1:8000/api/me')
+            if(me.data.is_staff){
+                navigate('/homeuser')
+            }else{
+                navigate('/homeuser')
+            }
             navigate('/homeuser')              
         } catch (error) {
             console.log("Error: ", error);
@@ -51,7 +57,10 @@ export default function Login(){
                     <p>{message}</p>
                 </div>
                 <button className="btn_1" onClick={logar}>Enter</button>
+                <p>Não tem conta?</p>
+                <button className="btn_1" onClick={() => navigate('/register')}>Cadastre-se</button>
             </section>
-        </div>
+            
+            </div>
     )
 }

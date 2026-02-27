@@ -7,7 +7,6 @@ class Usuario(models.Model):
         ('LOCADOR', 'Locador'),
         ('LOCATARIO', 'Locatário')
     ]
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="perfil")
     nome = models.CharField(max_length=100)
     email = models.EmailField(unique=True, blank=True, null=True)
@@ -48,4 +47,3 @@ class Pagamento(models.Model):
 
     def __str__(self):
         return f"Pagamento {self.id}"
-
