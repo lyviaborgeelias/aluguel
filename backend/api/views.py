@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Usuario, Imovel, Contrato, Pagamento
 from .serializers import *
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -27,9 +27,9 @@ from .filters import *
 #         return Response(serializers.data, status=status.HTTP_400_BAD_REQUEST)
 
 # ***** ModelViewSet *****
-class UsuarioViewSet(ModelViewSet):
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
+# class UsuarioViewSet(ModelViewSet):
+#     queryset = Usuario.objects.all()
+#     serializer_class = UsuarioSerializer
     # permission_classes = [IsAuthenticated]
 
     # Filtro básico
@@ -40,14 +40,14 @@ class UsuarioViewSet(ModelViewSet):
     #     return self.queryset
 
     # Filtros declarativos
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = UsuarioFilter
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_class = UsuarioFilter
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if self.request.user.is_staff:
-            return qs
-        return qs.filter(user=self.queryset.user)
+    # def get_queryset(self):
+    #     qs = super().get_queryset()
+    #     if self.request.user.is_staff:
+    #         return qs
+    #     return qs.filter(user=self.queryset.user)
 
 class ImovelViewSet(ModelViewSet):
     queryset = Imovel.objects.all()
@@ -109,7 +109,7 @@ class RegisterView(APIView):
 
 
 class MeView(RetrieveAPIView):
-    serializer_class = UsuarioSerializer
+    serializer_class = UsuarioMeSerializer
     def get_object(self, request):
         perfil, created = Usuario.objects.get_or_create(
             user = self.request.user,
@@ -120,6 +120,52 @@ class MeView(RetrieveAPIView):
             }
         )
         return perfil
+
+class UsuarioViewSet(ModelViewSet):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioMeSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = UsuarioFilter
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        return qs.filter(user=self.request.user)
+    
+    def get_serializer_class(self):
+        if self.action == 'me':
+            return UsuarioMeSerializer
+        return super().get_serializer_class()
+    
+    @action(
+        detail=False,
+        methods=['get'],
+        url_path='me',
+        permission_classes=[IsAuthenticated]
+    )
+
+    def me(self, request):
+        usuario = Usuario.objects.filter(user=request.user).first()
+        if not usuario:
+            return Response({'detail': "Perfil de usuário não encontrado."}, status=404)
+        
+        serializer = self.get_serializer(usuario)
+        return Response(serializer.data)
+    
+    @action(
+        detail=False,
+        methods=['get'],
+        url_path='tipo-choices',
+        permission_classes=[AllowAny]
+    )
+
+    def tipo_choices(self, request):
+        return Response([
+            {"value": v, "label": l}
+            for v, l in Usuario.TIPO_CHOICES
+        ])
 
 # ***** GENERICS *****
 # Crud Usuários --> forma de fazer utilizando class
