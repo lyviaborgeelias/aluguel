@@ -5,6 +5,10 @@ import HomeAdmin from './pages/admin/home'
 import Cadastro from './pages/register'
 import AdminRoute from './routes/AdminRoute'
 import PrivateRoute from './routes/PrivateRoute'  
+import Payments from './pages/admin/payments'
+import Properties from './pages/admin/properties'
+import Contracts from './pages/admin/contracts'
+import Users from './pages/admin/users'
 
 const App = ()=>{
   return(
@@ -28,6 +32,42 @@ const App = ()=>{
           element={
             <AdminRoute>
               <HomeAdmin/>
+            </AdminRoute>
+            }
+          />
+
+        <Route 
+          path='/admin/payments/' 
+          element={
+            <AdminRoute>
+              <Payments/>
+            </AdminRoute>
+            }
+          />
+
+        <Route 
+          path='/admin/properties/' 
+          element={
+            <AdminRoute>
+              <Properties/>
+            </AdminRoute>
+            }
+          />
+
+        <Route 
+          path='/admin/contracts/' 
+          element={
+            <AdminRoute>
+              <Contracts/>
+            </AdminRoute>
+            }
+          />
+
+        <Route 
+          path='/admin/users/' 
+          element={
+            <AdminRoute>
+              <Users/>
             </AdminRoute>
             }
           />
