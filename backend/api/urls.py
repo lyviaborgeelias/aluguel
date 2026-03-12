@@ -18,6 +18,7 @@ urlpatterns = [
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', RegisterView.as_view(), name = 'register'),
     # path('me/', MeView.as_view, name='me'),
+    path('importar_imoveis', importar_imoveis, name="importar_imoveis"),
     path('', include(router.urls))
     
     # # Usuários

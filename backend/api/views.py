@@ -3,13 +3,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Usuario, Imovel, Contrato, Pagamento
 from .serializers import *
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import *
+import pandas as pd
 
 # Crud --> forma de fazer utilizando método
 # @api_view(['GET', 'POST'])
@@ -205,7 +206,35 @@ class DashboardViewSet(ModelViewSet):
                 'imoveis_destaque': list(imoveis_destaque),
                 'contratos_recentes': list(contratos_recentes)
             })
-        
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def importar_imoveis(request):
+    arquivo = request.FILES.get("file")
+    if not arquivo:
+        return Response({"detail": "Nenhum arquivo enviado."}, status=status.HTTP_400_BAD_REQUEST)
+   
+    try:
+        df = pd.read_excel(arquivo)
+        colunas_esperadas = ['titulo', 'tipo', 'valor_aluguel', 'status', 'locador_id']
+        for coluna in colunas_esperadas:
+            if coluna not in df.columns:
+                return Response({"detail": f"Coluna obrigatória ausente: {coluna}"}, status=status.HTTP_400_BAD_REQUEST)
+        for _, row in df.iterrows():
+            locador_id = int(row["locador_id"])
+            if not Usuario.objects.filter(id=locador_id).exists():
+                return Response({"detail": f"Locador com id: {locador_id} não existe"}, status=status.HTTP_400_BAD_REQUEST)
+            Imovel.objects.create(
+                titulo = row['titulo'],
+                tipo = row['tipo'],
+                valor_aluguel = row['valor_aluguel'],
+                status = row['status'],
+                locador_id = locador_id
+            )
+        return Response({"detail": "Importação concluida com sucesso..."})
+    except Exception as e:
+        return Response({"detail": f"Erro ao importar arquivo: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
 # ***** GENERICS *****
 # Crud Usuários --> forma de fazer utilizando class
 # class UsuarioView(ListCreateAPIView):

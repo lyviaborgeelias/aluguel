@@ -1,5 +1,5 @@
 // src/pages/admin/properties/index.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
@@ -40,6 +40,8 @@ export default function Properties() {
 
   const [erro, setErro] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const fileInputRef = useRef(null);
 
   const headers = useMemo(
     () => ({ headers: { Authorization: `Bearer ${token}` } }),
@@ -183,6 +185,45 @@ export default function Properties() {
       }
     }
   };
+
+  const abrirSeletorExcel = () => {
+    fileInputRef.current.click()
+  }
+
+  const importarExcel = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setErro("");
+    setLoading(true);
+
+    try {
+      await axios.post(
+        "http://127.0.0.1:8000/api/importar_imoveis/",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      await listar();
+      alert("Importação realizada com sucesso.");
+    } catch (error) {
+      console.log(error);
+      console.log(error.response?.data);
+      setErro("Não foi possível importar a planilha.");
+    } finally {
+      setLoading(false);
+      event.target.value = "";
+    }
+  };
+
   return (
     <div className="dashboard">
       {/* Header */}
@@ -211,6 +252,21 @@ export default function Properties() {
           <span className="dot" />
           <span>{loading ? "Carregando" : "Conectado"}</span>
         </div>
+        <button
+          className="actionBtn"
+          onClick={abrirSeletorExcel}
+          disabled={loading}
+        >
+          Importar Excel
+        </button>
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".xlsx,.xls"
+          style={{ display: "none" }}
+          onChange={importarExcel}
+        />
       </div>
 
       {/* Cards */}

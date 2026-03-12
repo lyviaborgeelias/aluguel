@@ -25,7 +25,7 @@ export default function Login() {
       });
 
       const access = response.data.access;
-
+      
       // Salva o token
       localStorage.setItem("token", access);
 
